@@ -23,6 +23,7 @@ else {
 	      brow    = require("browserify"),
 	      liveify = require("liveify"),
 	      socket  = require("socket.io"),
+	      uuid    = require("uuid"),
 	      http    = require("http"),
 	      server  = http.createServer(duvet.route.app),
 	      io      = socket.listen(server);
@@ -40,9 +41,14 @@ else {
 	}
 
 	io.sockets.on('connection', function(socket) {
+		var id = uuid.v4();
 		socket.on('mouse', function(pos) {
+			pos.id = id;
 			socket.broadcast.emit('mouse', pos);
 		});
+		socket.on('disconnect', function() {
+			socket.broadcast.emit('disconnect', id);
+		})
 	});
 
 	ANY(true,function(i){this.started = Date.now(); return i;});

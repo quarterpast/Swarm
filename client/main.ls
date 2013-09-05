@@ -7,7 +7,17 @@ require! {
 $.fn import baconjs.$
 
 socket = io.connect 'http://localhost'
-socket.on \mouse -> $ 'img' .offset it
+socket.on \mouse ({id,left,top})->
+	$i = $ '#' + id
+	if $i.length
+		$i.offset {left,top}
+	else
+		$ 'body' .append do
+			$ '<img>'
+			.attr {src: '/res/cursor.png', id}
+			.offset {left,top}
+
+socket.on \disconnect -> $ '#' + it .remove!
 
 $ 'body' .as-event-stream \mousemove
 .map (.{left:client-x, top:client-y})
