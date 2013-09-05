@@ -18,11 +18,14 @@ if(env == 'production') {
 
 if(options.cluster && cluster.isMaster) os.cpus().forEach(cluster.fork);
 else {
-	const ls         = require("LiveScript"),
-	      duvet      = require("duvet"),
-	      browserify = require("browserify"),
-	      liveify    = require("liveify"),
-	      http       = require("http");
+	const ls      = require("LiveScript"),
+	      duvet   = require("duvet"),
+	      brow    = require("browserify"),
+	      liveify = require("liveify"),
+	      socket  = require("socket.io"),
+	      http    = require("http"),
+	      server  = http.createServer(duvet.route.app),
+	      io      = socket.listen(server);
 
 	duvet.template.engines.html = {
 		compile: function(src) {
@@ -36,10 +39,22 @@ else {
 		global[p] = duvet.route[p];
 	}
 
+	io.sockets.on('connection', function(socket) {
+		socket.on('mouse', function(pos) {
+			socket.broadcast.emit('mouse', pos);
+		});
+	});
+
 	ANY(true,function(i){this.started = Date.now(); return i;});
 
 	GET('/', function() { return this.render('index') });
 	GET('/res/', duvet.middleware.static('res'));
+	GET('/app.js', function() {
+		return {
+			body: brow(['./client/main.ls']).transform('liveify').bundle(),
+			headers: {'content-type':'application/javascript'}
+		}
+	});
 
 	duvet.route.Router.error = duvet.magic.async(function(err) {
 		return this.render("500",{title: "FISSION MAILED",splash: false,stack: err.stack});
@@ -55,7 +70,6 @@ else {
 		return last;
 	});
 
-	var server = http.createServer(duvet.route.app);
 	var port = process.env.PORT || options.port;
 	server.listen(port, function() {console.log("listening on",port)});
 }
