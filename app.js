@@ -18,8 +18,7 @@ if(env == 'production') {
 
 if(options.cluster && cluster.isMaster) os.cpus().forEach(cluster.fork);
 else {
-	const ls      = require("LiveScript"),
-	      duvet   = require("duvet"),
+	const duvet   = require("duvet"),
 	      brow    = require("browserify"),
 	      liveify = require("liveify"),
 	      socket  = require("socket.io"),
