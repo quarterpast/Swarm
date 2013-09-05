@@ -2,11 +2,12 @@ require! {
 	'zepto-browserify'.$
 	baconjs
 	io:\socket.io-client
+	'../options.json'
 }
 
 $.fn import baconjs.$
 
-socket = io.connect 'http://localhost'
+socket = io.connect 'http://' + options.self.host
 socket.on \mouse ({id,left,top})->
 	$i = $ '#' + id
 	if $i.length
