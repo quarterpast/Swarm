@@ -38,9 +38,8 @@ else {
 
 	ANY(true,function(i){this.started = Date.now(); return i;});
 
-	GET('/', function() {
-		return this.render('index')
-	});
+	GET('/', function() { return this.render('index') });
+	GET('/res/', duvet.middleware.static('res'));
 
 	duvet.route.Router.error = duvet.magic.async(function(err) {
 		return this.render("500",{title: "FISSION MAILED",splash: false,stack: err.stack});
