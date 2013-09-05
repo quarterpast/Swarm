@@ -56,7 +56,13 @@ else {
 	GET('/res/', duvet.middleware.static('res'));
 	GET('/app.js', function() {
 		return {
-			body: brow(['./client/main.ls']).transform('liveify').bundle(),
+			body: brow(['./client/main.ls']).transform('liveify').bundle({
+				insertGlobalVars: {
+					options: function() {
+						return JSON.stringify(options)
+					}
+				}
+			}),
 			headers: {'content-type':'application/javascript'}
 		}
 	});

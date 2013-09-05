@@ -2,7 +2,6 @@ require! {
 	'zepto-browserify'.$
 	baconjs
 	io:\socket.io-client
-	'../options.json'
 }
 
 $.fn import baconjs.$
