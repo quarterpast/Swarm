@@ -9,6 +9,7 @@
     "browserify": "~2.29.1",
     "zepto-browserify": "~1.0.0",
     "uuid": "~1.4.1",
-    "callsite": "~1.0.0"
+    "callsite": "~1.0.0",
+    "duvet": "0.1.0-1"
   }
 }
