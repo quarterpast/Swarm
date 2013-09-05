@@ -27,6 +27,11 @@ else {
 	      server  = http.createServer(duvet.route.app),
 	      io      = socket.listen(server);
 
+	io.configure(function () { 
+		io.set("transports", ["xhr-polling"]); 
+		io.set("polling duration", 10); 
+	});
+
 	duvet.template.engines.html = {
 		compile: function(src) {
 			return function evaluate(data) {
