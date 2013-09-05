@@ -1,0 +1,18 @@
+{
+	"development": {
+		"cluster":false,
+		"port":8000,
+		"self":{
+			"host":"localhost",
+			"port": 8000
+		}
+	},
+	"production": {
+		"cluster":true,
+		"port":8000,
+		"self":{
+			"host":"mouseswarm.herokuapp.com",
+			"port": 80
+		}
+	}
+}
